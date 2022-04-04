@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+function computerPlay() {
+    
+    const rpsChoice = {
+        0: "rock",
+        1: "scissors",
+        2: "paper"
+    };
+
+    return rpsChoice[Math.floor(Math.random() * 3)];
+}
+
+function playRound(playerSelection, computerSelection) {
+    switch (playerSelection + computerSelection) {
+        case "rockscissors":
+        case "paperrock":
+        case "scissorspaper":
+            return "You Win!";
+        case "rockpaper":
+        case "paperscissors":
+        case "scissorsrock":
+            return "You Lose!";
+        case "rockrock":
+        case "paperpaper":
+        case "scissorsscissors":
+            return "It's a Tie!"
+        default:
+            return "Please enter a valid move!"
+    }
+}
+
+let playerScore = 0
+let computerScore = 0
+
+function game() {
+    const computerSelection = computerPlay();
+    const playerSelection = prompt("Pick your move: ").toLowerCase();
+    console.log(`The computer played ${computerSelection}`) 
+    console.log(playRound(playerSelection, computerSelection));
+
+    if (playRound(playerSelection, computerSelection) =="You Lose!") {
+        computerScore++;
+    } else if (playRound(playerSelection, computerSelection) == "You Win!"){
+        playerScore++
+    } else {
+        game();
+    }
+}
+
+console.log("Rock, paper, scissors. Best of five.")
+
+for (let i = 0; i < 5; i++) {
+    game();
+}
+
+if (playerScore > computerScore) {
+    console.log("You won the game!")
+} else {
+    console.log("You lost the game")
+}
+
+
+
+</script>
+</html>
