@@ -5,9 +5,85 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap');
+
+        * {
+            font-family: 'Rubik Wet Paint', cursive;
+            background-color: #800020;
+            color: white;
+            text-shadow: 2px 2px black;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
+        }
+
+        button {
+            font-size: 30px;
+            border: 3px solid white;
+            border-radius: 8px;
+            transition: 0.5;
+            margin: 8px;
+        }
+
+        button:hover {
+            transform: scale(1.2);
+            box-shadow: 3px 3px black;
+        }
+
+        .score {
+            font-size: 200px;
+            display: flex;
+            gap: 80px;
+        }
+
+
+        .titles{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            font-size: 30px;
+        }
+
+        .titles h1 {
+            width: 400px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .message {
+            font-size: 70px;
+            text-align: center;
+        }
+
+        .selected {
+            color: #800020;
+            background-color: black;
+            border: 2px solid #800020;
+        }
+
+    </style>
 </head>
 <body>
-    
+        <div class="titles"><h1>Human Score</h1><h1>Computer Score</h1></div>
+        <div class="score">
+            <div id="player-score">0</div>:<div id="computer-score">0</div>
+        </div>
+    <div class="options">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <h1 class="message">
+        Let's play a game.
+    </h1>
 </body>
 <script>
 
@@ -22,54 +98,70 @@ function computerPlay() {
     return rpsChoice[Math.floor(Math.random() * 3)];
 }
 
+let playerScore = 0;
+let computerScore = 0;  
+
 function playRound(playerSelection, computerSelection) {
     switch (playerSelection + computerSelection) {
         case "rockscissors":
         case "paperrock":
         case "scissorspaper":
-            return "You Win!";
+            console.log('win')
+            h1_message.innerHTML = `The computer played ${computerSelection}. <br/> You won the round!`;
+            playerScore++;
+            span_playerScore.textContent = playerScore;
+            break;
         case "rockpaper":
         case "paperscissors":
         case "scissorsrock":
-            return "You Lose!";
+            console.log('loss')
+            h1_message.innerHTML = `The computer played ${computerSelection}.<br/> You lose this round.`;
+            computerScore++;
+            span_computerScore.textContent = computerScore;
+            break;
         case "rockrock":
         case "paperpaper":
         case "scissorsscissors":
-            return "It's a Tie!"
-        default:
-            return "Please enter a valid move!"
+            console.log('tie')
+            h1_message.innerHTML = `The computer played ${computerSelection}.<br/> Tie.`
+            break;
     }
+
+
+    if (playerScore == 5) {
+        h1_message.innerHTML = `The computer played ${computerSelection}.<br/> You win the game!`
+        selections.forEach(selection => selection.removeEventListener('click', game));
+
+    } else if (computerScore == 5) {
+        h1_message.innerHTML = `The computer played ${computerSelection}.<br/> You lose the game.`
+        selections.forEach(selection => selection.removeEventListener('click', game));
+    }
+
 }
 
-let playerScore = 0
-let computerScore = 0
+
+
+
+const span_playerScore = document.querySelector('#player-score');
+const span_computerScore = document.querySelector('#computer-score');
+const h1_message = document.querySelector('.message');
+
 
 function game() {
+
+    this.classList.add('selected');
+    setTimeout(() => this.classList.toggle('selected'), 200);
     const computerSelection = computerPlay();
-    const playerSelection = prompt("Pick your move: ").toLowerCase();
-    console.log(`The computer played ${computerSelection}`) 
-    console.log(playRound(playerSelection, computerSelection));
+    const playerSelection = this.id;
+    playRound(playerSelection, computerSelection);
 
-    if (playRound(playerSelection, computerSelection) =="You Lose!") {
-        computerScore++;
-    } else if (playRound(playerSelection, computerSelection) == "You Win!"){
-        playerScore++
-    } else {
-        game();
-    }
+
 }
+// console.log('hi')
 
-console.log("Rock, paper, scissors. Best of five.")
+const selections = document.querySelectorAll('button');
+selections.forEach(selection => selection.addEventListener('click', game));
 
-for (let i = 0; i < 5; i++) {
-    game();
-}
-
-if (playerScore > computerScore) {
-    console.log("You won the game!")
-} else {
-    console.log("You lost the game")
-}
 
 
 
